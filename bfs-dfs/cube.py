@@ -3,14 +3,16 @@ class Cube:
     Implementation of a 2x2x2 Rubik's cube
     '''
     def __init__(self):
-        (flu, luf, ufl,
-        fur, urf, rfu, 
-        fdl, dlf, lfd, 
-        frd, rdf, dfr, 
-        bul, ulb, lbu, 
-        bru, rub, ubr, 
-        bld, ldb, dbl, 
-        bdr, drb, rbd) = [i for i in range(24)]
+        (
+            flu, luf, ufl,  # 0th cubie: front, left, up 
+            fur, urf, rfu,  # 1th cubie: front, up, right
+            fdl, dlf, lfd,  # 2th cubie: front, down, left
+            frd, rdf, dfr,  # 3th cubie: front, right, down
+            bul, ulb, lbu,  # 4th cubie: back, up, left
+            bru, rub, ubr,  # 5th cubie: back, right, up
+            bld, ldb, dbl,  # 6th cubie: back, left, down
+            bdr, drb, rbd   # 7th cubie: back, down, right
+        ) = [i for i in range(24)]
         
         # Init state
         self.I = (
