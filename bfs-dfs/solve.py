@@ -2,11 +2,13 @@ from collections import deque
 import time
 from cube import Cube
 
+
 class TestCases:
     test_case1 = {
         'source': (6, 7, 8, 20, 18, 19, 3, 4, 5, 16, 17, 15, 0, 1, 2, 14, 12, 13, 10, 11, 9, 21, 22, 23),
         'goal': (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23)
     }
+
 
 def trace_path(visited, source, goal):
     path = []
@@ -16,12 +18,12 @@ def trace_path(visited, source, goal):
         path.append(rot)
     return path[::-1]
 
+
 def bfs(source, goal):
     cube = Cube()
-    
-    visited = {}
-    visited[source] = (source, -1)
-    
+
+    visited = {source: (source, -1)}
+
     nodes = deque()
     nodes.append(source)
 
@@ -39,6 +41,31 @@ def bfs(source, goal):
                 else:
                     continue
 
+
+def dfs(source, goal):
+    cube = Cube()
+
+    visited = {source: (source, -1)}
+    nodes = deque()
+    nodes.append(source)
+    # nodes.insert(0, source)
+    while nodes:
+        # node = nodes.popleft()
+        node = nodes.pop()
+        if node == goal:
+            print('Goal State Reached/dfs')
+            return visited
+        else:
+            for rot in cube.rotations:
+                temp_node = cube.apply_rotation(node, cube.rotations[rot])
+                if not temp_node in visited:
+                    visited[temp_node] = (node, rot)
+                    nodes.append(temp_node)
+                    # nodes.insert(0, temp_node)
+                else:
+                    continue
+
+
 def solve(test_case, func):
     source = test_case['source']
     goal = test_case['goal']
@@ -47,10 +74,13 @@ def solve(test_case, func):
     end = time.time()
     path = trace_path(visited, source, goal)
     print(f'The time taken to reach the goal state using {func.__name__}: {round(end - start, 2)}')
-    print(f'The path is: {path}')
+    # print(f'The path is: {path}')
+
 
 def main():
     solve(TestCases.test_case1, bfs)
+    solve(TestCases.test_case1, dfs)
+
 
 if __name__ == '__main__':
     main()
