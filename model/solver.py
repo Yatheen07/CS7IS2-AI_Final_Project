@@ -1,6 +1,6 @@
-from cube import RubicsCube,CubeSolver
-from scrambler import Scrammbler
-from scramble_configurations import scramble_configurations
+from model.cube import RubicsCube,CubeSolver
+from model.scrambler import Scrammbler
+from model.scramble_configurations import scramble_configurations
 
 #Initialise the Cube State - intial state is solved.
 cube = RubicsCube()

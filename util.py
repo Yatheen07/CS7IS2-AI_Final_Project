@@ -1,24 +1,38 @@
 import numpy as np
-xInitial = np.array([
-        ['R' ,'G' ,'G'],
-        ['G','W','W'],
-        ['Y','Y','B'],
-        ['G', 'E', 'G'],
-        ['G', 'G', 'G'],
-        ['G', 'E', 'G'],
-        ['R', 'E', 'R'],
-        ['R', 'R', 'R'],
-        ['R', 'E', 'R'],
-        ['B', 'E', 'B'],
-        ['B', 'B', 'B'],
-        ['B', 'E', 'B'],
-        ['O', 'E', 'O'],
-        ['O', 'O', 'O'],
-        ['O', 'E', 'O'],
-        ['Y', 'E', 'Y'],
-        ['Y', 'Y', 'Y'],
-        ['Y', 'E', 'Y']
-    ])
+import heapq
+import sqlite3
+
+cornerdb = dict()
+edgedb = dict()
+
+class PriorityQueue:
+    def  __init__(self):
+        self.heap = []
+        self.count = 0
+
+    def push(self, item, priority):
+        entry = (priority, self.count, item)
+        heapq.heappush(self.heap, entry)
+        self.count += 1
+
+    def pop(self):
+        (_, _, item) = heapq.heappop(self.heap)
+        return item
+
+    def isEmpty(self):
+        return len(self.heap) == 0
+
+    def update(self, item, priority):
+        for index, (p, c, i) in enumerate(self.heap):
+            if i == item:
+                if p <= priority:
+                    break
+                del self.heap[index]
+                self.heap.append((priority, c, item))
+                heapq.heapify(self.heap)
+                break
+        else:
+            self.push(item, priority)
 
 def getCornerString(x):
     cornerString = ''
@@ -32,7 +46,40 @@ def getEdgeString(x):
     edges = ''
     for i in range(18):
         if i%3==0 or i%3==2:
-            edges = edges + xInitial[i,1]
+            edges = edges + x[i,1]
         else:
-            edges = edges + xInitial[i,0] + xInitial[i,2]
+            edges = edges + x[i,0] + x[i,2]
     return edges
+
+def load_cornerpatterns():
+    conn = sqlite3.connect('pattern.db')
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM CORNER_PATTERN")
+    rows = cur.fetchall()
+    for x, y in rows:
+        cornerdb[x] = y
+
+def load_edgepatterns():
+    conn = sqlite3.connect('edgepattern.db')
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM EDGE_PATTERN")
+    rows = cur.fetchall()
+    for x, y in rows:
+        edgedb[x] = y
+
+def patternDatabaseHeuristic(cube):
+    cornerstring = getCornerString(cube)
+    edgestring = getEdgeString(cube)
+    cornerh = cornerdb.get(cornerstring,-1)
+    edgeh = edgedb.get(edgestring,-1)
+    if cornerh != -1 and edgeh !=-1:
+        return max(cornerh,edgeh)
+    elif cornerh == -1:
+        return edgeh
+    elif edgeh == -1:
+        return cornerh
+    else:
+        return -1
+
+
+

@@ -1,5 +1,6 @@
 import numpy as np
-from cube import CubeSolver
+from model.cube import CubeSolver
+
 
 class Scrammbler:
     def __init__(self):
