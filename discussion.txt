@@ -1,0 +1,21 @@
+state : strings (108) "U1U2U3....B9"
+state : strings (54) "0-53"
+
+random initial state - testcase - online scrambler
+
+ACTIONS: 12
+    - CLOCKWISE - 6
+    - ANTI-CLOCKWISE - 6
+
+    FRONT CLOCKWISE - F1
+    FRONT ANTI-CLOCKWISE - F2
+    LEFT  CLOCKWISE - L1
+    LEFT ANTI-CLOCKWISE - L2
+    RIGHT CLOCKWISE - R1
+    RIGHT ANTI-CLOCKWISE - R2
+    UP CLOCKWISE - U1
+    UP ANTI-CLOCKWISE U2
+    DOWN CLOCKWISE - D1
+    DOWN ANTI-CLOCKWISE - D2
+    BACK CLOCKWISE - B1
+    BACK ANTI-CLOCKWISE - B2
