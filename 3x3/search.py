@@ -25,7 +25,7 @@ class Search:
     def traverse_states(self, frontier,pop_action):
         goal_reached = False
         visited = {self.cube.get_configuration_string(): (self.start_state_config,"-1")}
-        currentNode = self.cube
+        currentNode = copy.deepcopy(self.cube)
         frontier.append(currentNode)
         while frontier:
             if self.depth == 0:
@@ -100,11 +100,12 @@ class Search:
                 currentState = frontier.pop()
                 
                 if currentState.state.is_cube_solved():
-                    # print('Goal Height:', currentState.cost)
-                    # print('Branching Factor:', sum(branching_factors)/len(branching_factors))
-                    # print("Nodes Generated:", nodes)
+                    print('[INFO] Goal Height:', currentState.cost)
+                    print('[INFO] Branching Factor:', sum(branching_factors)/len(branching_factors))
+                    print("[INFO] Nodes Generated:", nodes)
+                    print(f"[INFO] Elapsed time: {time.time() - start}")
                     goal_reached = True
-                    self.printResults(path=self._trace_path(currentState.state,visited),goal_reached=goal_reached,algorithm="Iterative Deepning Depth First Search",time_elapsed=time.time() - start)
+                    # self.printResults(path=self._trace_path(currentState.state,visited),goal_reached=goal_reached,algorithm="Iterative Deepning Depth First Search",time_elapsed=time.time() - start)
                     return
 
                 if currentState.cost + 1 <= cost_limit:
@@ -121,17 +122,37 @@ class Search:
                         new.state.scramble([action])
                         
                         config_string = new.state.get_configuration_string()
-
-                        if not config_string in visited:
-                            visited[config_string] = (currentState.state.get_configuration_string(), key)
-                            frontier.append(new)
-                            branch += 1
-                        else:
-                            continue
-
+                        frontier.append(new)
+                        # if not config_string in visited:
+                        #     visited[config_string] = (currentState.state.get_configuration_string(), key)
+                        #     frontier.append(new)
+                        #     branch += 1
+                        # else:
+                        #     continue
+                    # if curr.parent is not None and np.array_equal(curr.parent.cube, new.cube):
+                    if currentState.parent is not None and (self.commonParent(new.cube, currentState) or self.containsChild(new.cube, frontier)):
+                        continue
+                    frontier.append(new)
+                    branch += 1
                     branching_factors.append(branch)
 
             branching_factors.clear()
             cost_limit = cost_limit + 1
 
-        self.printResults(path=self._trace_path(currentState.state,visited),goal_reached=goal_reached,algorithm="IDDFS",time_elapsed=time.time() - start)
+        #self.printResults(path=self._trace_path(currentState.state,visited),goal_reached=goal_reached,algorithm="IDDFS",time_elapsed=time.time() - start)
+
+    # checks if child ascendant of parent
+    def commonParent(child, parent):
+        curr = parent.parent
+        while curr is not None:
+            if np.array_equal(curr.cube, child): return True
+            curr = curr.parent
+
+        return False
+
+
+    # checks if frontier contains child
+    def containsChild(child, frontier):
+        for curr in frontier:
+            if np.array_equal(curr.cube, child): return True
+        return False

@@ -13,7 +13,7 @@ cube.PrintCube()
 
 #Scramble the state based on the preset configurations
 scrammbler = Scrammbler()
-scramble_sequence,unscramble_sequence = scrammbler.scramble(scramble_configurations[2])
+scramble_sequence,unscramble_sequence = scrammbler.scramble(scramble_configurations[0])
 
 #Scramble a fresh cube to get a initial state
 cube.scramble(action_sequence=scramble_sequence)
