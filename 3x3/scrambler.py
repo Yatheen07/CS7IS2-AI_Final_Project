@@ -35,7 +35,7 @@ class Scrammbler:
     def get_scramble_action_sequence(self,scramble_string):
         scramble_sequence = []
         actions = scramble_string.split(" ")
-        
+        print(f"Scramble Sequence: {actions}")
         for action in actions:
             if action not in self.action_map:
                 scramble_sequence.append(self.action_map[action[:-1]])
@@ -47,14 +47,18 @@ class Scrammbler:
     def get_unscramble_action_sequence(self,scramble_string):
         unscramble_sequence = []
         actions = reversed(scramble_string.split(" "))
+        unscramble_actions = []
         for action in actions:
             if action not in self.action_map:
                 negateAction = self.negate_action[action[:-1]]
                 unscramble_sequence.append(self.action_map[negateAction])
                 unscramble_sequence.append(self.action_map[negateAction])
+                unscramble_actions.append(negateAction)
             else:
                 negateAction = self.negate_action[action]
                 unscramble_sequence.append(self.action_map[negateAction])
+            unscramble_actions.append(negateAction)
+        print(f"Unscramble Sequence: {unscramble_actions}")
         return unscramble_sequence
 
     def scramble(self,scramble_string):

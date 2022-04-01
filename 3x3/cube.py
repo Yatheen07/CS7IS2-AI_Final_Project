@@ -42,6 +42,12 @@ class RubicsCube:
         cubeSolver = CubeSolver()
         for action in action_sequence:
             action(cubeSolver,self.cube)
+    
+    def get_configuration_string(self):
+        result = ""
+        for row in range(18):
+            result += ''.join(np.split(self.cube[row, 0:3],1)[0])
+        return result
 
 
 class CubeSolver:

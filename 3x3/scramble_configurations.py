@@ -1,4 +1,6 @@
 scramble_configurations = [
+    "F",
+    "F U'",
     "F2 L2 B2 U D' B D",
     "D B F D R' D' U' B' U2 L2 R2 D' F2 L' B2 U' B' F' L U2 B D2 L2 D F",
     "L' F' L D' U2 B2 U L' B D' F' R' F' R' D' U' F2 D F' R2 U2 L' F L D",
