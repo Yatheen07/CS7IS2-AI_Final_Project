@@ -47,8 +47,7 @@ def generateCornerPatterns():
                         #print(string)
                         cornermap[string] = child.cost
                         queue.append(child)
-                count += len(edgemap)
-                print('Inserting into corner pattern database')        
+                count += len(edgemap)    
                 cursor.executemany('INSERT INTO CORNER_PATTERN(CORNERS, VALUE) VALUES (?, ?)', cornermap.items())
                 con.commit()
                 cornermap.clear()
@@ -64,7 +63,6 @@ def generateCornerPatterns():
 
 def generateEdgePattern(con,cursor):
     try:
-
         con = sqlite3.connect('edgepattern.db')
         print("Creating edge pattern database");
         cursor = con.execute('CREATE TABLE EDGE_PATTERN(EDGES VARCHAR2(100),VALUE INT)')
@@ -94,7 +92,6 @@ def generateEdgePattern(con,cursor):
                         edgemap[string] = child.cost
                         queue.append(child)
                 count += len(edgemap)
-                print('Inserting into edge pattern database')
                 cursor.executemany('INSERT INTO EDGE_PATTERN(EDGES, VALUE) VALUES (?, ?)', edgemap.items())
                 con.commit()
                 edgemap.clear()
