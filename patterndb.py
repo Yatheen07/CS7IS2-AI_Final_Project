@@ -1,4 +1,3 @@
-from msilib.schema import Error
 import sqlite3
 import time
 import threading
@@ -57,7 +56,7 @@ def generateCornerPatterns():
         print('Total Patterns generated are ',len(cornermap))
         end = time.time()
         print(f'The time taken to generate pattern : {round(end - start, 2)}')
-    except Error as e:
+    except Exception as e:
         print(e,'Error Occurred')
     finally:
         cursor.close()
