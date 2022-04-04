@@ -61,7 +61,7 @@ def generateCornerPatterns():
         cursor.close()
         con.close()
 
-def generateEdgePattern(con,cursor):
+def generateEdgePattern():
     try:
         con = sqlite3.connect('edgepattern.db')
         print("Creating edge pattern database");
