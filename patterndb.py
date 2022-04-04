@@ -35,7 +35,7 @@ def generateCornerPatterns():
         queue.append(curr)
         while(len(queue)!=0):
             curr = queue.pop(0)
-            if(curr.cost < 8):
+            if(curr.cost < 10):
                 childCost = curr.cost + 1
                 for key,action in scramble.action_map.items():
                     child = Cube()
@@ -79,7 +79,7 @@ def generateEdgePattern():
         queue.append(curr)
         while(len(queue)!=0):
             curr = queue.pop(0)
-            if(curr.cost <= 6):
+            if(curr.cost <= 7):
                 childCost = curr.cost + 1
                 for key,action in scramble.action_map.items():
                     child = Cube()
@@ -109,12 +109,8 @@ def generateEdgePattern():
 
 def main():
     try: 
-        a = threading.Thread(target = generateCornerPatterns)
-        b = threading.Thread(target = generateEdgePattern)
-        a.start()
-        b.start()
-        # generateCornerPatterns(con1,cursor1)
-        # generateEdgePattern(con2,cursor2)
+        generateCornerPatterns()
+        generateEdgePattern()
         # cursor1.executemany('INSERT INTO CORNER_PATTERN(CORNERS, VALUE) VALUES (?, ?)', cornermap.items())
         # con1.commit()
         # cursor2.executemany('INSERT INTO EDGE_PATTERN(EDGES, VALUE) VALUES (?, ?)', edgemap.items())
