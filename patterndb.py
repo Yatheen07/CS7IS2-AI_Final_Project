@@ -104,7 +104,7 @@ def generateEdgePattern(con,cursor):
         print('Total Patterns generated are ',count)
         end = time.time()
         print(f'The time taken to generate pattern : {round(end - start, 2)}')
-    except Error as e:
+    except Exception as e:
         print(e,'Error Occurred')
     finally:
         cursor.close()
@@ -122,7 +122,7 @@ def main():
         # con1.commit()
         # cursor2.executemany('INSERT INTO EDGE_PATTERN(EDGES, VALUE) VALUES (?, ?)', edgemap.items())
         # con2.commit()
-    except Error as e:
+    except Exception as e:
         print(e,'Error Occurred')
     
 if __name__ == '__main__':
