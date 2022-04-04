@@ -74,12 +74,29 @@ def patternDatabaseHeuristic(cube):
     edgeh = edgedb.get(edgestring,-1)
     if cornerh != -1 and edgeh !=-1:
         return max(cornerh,edgeh)
+    elif cornerh == -1 and edgeh == -1:
+        return 0
     elif cornerh == -1:
         return edgeh
-    elif edgeh == -1:
-        return cornerh
     else:
-        return -1
+        return cornerh
+
+class Stack:
+    "A container with a last-in-first-out (LIFO) queuing policy."
+    def __init__(self):
+        self.list = []
+
+    def push(self,item):
+        "Push 'item' onto the stack"
+        self.list.append(item)
+
+    def pop(self):
+        "Pop the most recently pushed item from the stack"
+        return self.list.pop()
+
+    def isEmpty(self):
+        "Returns true if the stack is empty"
+        return len(self.list) == 0
 
 
 

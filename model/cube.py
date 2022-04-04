@@ -24,7 +24,7 @@ class RubicsCube:
         self.cube = np.copy(self.solved_config)
 
     def is_cube_solved(self):
-       return np.array_equal(self.cube,self.solved_config) 
+       return np.array_equal(self.cube,self.solved_config)
     
     def PrintCube(self):
         print("             ", self.cube[0, 0:3])

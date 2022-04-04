@@ -17,7 +17,8 @@ goal = rubicsCube.cube
 cubeSolver = CubeSolver()
 scramble = Scrammbler()
 
-def generateCornerPatterns():
+def generateCornerPatterns(con,cursor):
+    count = 0
     start = time.time()
     print('Generating corner cubes patterns')
     queue = list()
@@ -29,7 +30,7 @@ def generateCornerPatterns():
     queue.append(curr)
     while(len(queue)!=0):
         curr = queue.pop(0)
-        if(curr.cost < 6):
+        if(curr.cost < 8):
             childCost = curr.cost + 1
             for key,action in scramble.action_map.items():
                 child = Cube()
@@ -41,14 +42,19 @@ def generateCornerPatterns():
                     print(string)
                     cornermap[string] = child.cost
                     queue.append(child)
+            count += len(edgemap)
+            print('Inserting into corner pattern database')        
+            cursor.executemany('INSERT INTO CORNER_PATTERN(CORNERS, VALUE) VALUES (?, ?)', cornermap.items())
+            con.commit()
+            cornermap.clear()
     print('Corner pattern generation complete')
     print('Total Patterns generated are ',len(cornermap))
     end = time.time()
     print(f'The time taken to generate pattern : {round(end - start, 2)}')
 
-def generateEdgePattern():
-    end = time.time()
+def generateEdgePattern(con,cursor):
     start = time.time()
+    count = 0
     print('Generating edge cubes patterns')
     queue = list()
     print('Goal string = ',util.getEdgeString(goal))
@@ -59,7 +65,7 @@ def generateEdgePattern():
     queue.append(curr)
     while(len(queue)!=0):
         curr = queue.pop(0)
-        if(curr.cost < 6):
+        if(curr.cost <= 6):
             childCost = curr.cost + 1
             for key,action in scramble.action_map.items():
                 child = Cube()
@@ -71,8 +77,15 @@ def generateEdgePattern():
                     print(string)
                     edgemap[string] = child.cost
                     queue.append(child)
+            count += len(edgemap)
+            print('Inserting into edge pattern database')
+            cursor.executemany('INSERT INTO EDGE_PATTERN(EDGES, VALUE) VALUES (?, ?)', edgemap.items())
+            con.commit()
+            edgemap.clear()
+        else:
+            break
     print('Edge pattern generation complete')
-    print('Total Patterns generated are ',len(edgemap))
+    print('Total Patterns generated are ',count)
     end = time.time()
     print(f'The time taken to generate pattern : {round(end - start, 2)}')
 
@@ -87,12 +100,12 @@ def main():
         print("Creating edge pattern database");
         cursor2 = con2.execute('CREATE TABLE EDGE_PATTERN(EDGES VARCHAR2(100),VALUE INT)')
         print('Edge pattern Table created sucessfully')
-        generateCornerPatterns()
-        generateEdgePattern()
-        cursor1.executemany('INSERT INTO CORNER_PATTERN(CORNERS, VALUE) VALUES (?, ?)', cornermap.items())
-        con1.commit()
-        cursor2.executemany('INSERT INTO EDGE_PATTERN(EDGES, VALUE) VALUES (?, ?)', edgemap.items())
-        con2.commit()
+        generateCornerPatterns(con1,cursor1)
+        generateEdgePattern(con2,cursor2)
+        # cursor1.executemany('INSERT INTO CORNER_PATTERN(CORNERS, VALUE) VALUES (?, ?)', cornermap.items())
+        # con1.commit()
+        # cursor2.executemany('INSERT INTO EDGE_PATTERN(EDGES, VALUE) VALUES (?, ?)', edgemap.items())
+        # con2.commit()
     except Error as e:
         print(e,'Error Occurred')
     finally:
