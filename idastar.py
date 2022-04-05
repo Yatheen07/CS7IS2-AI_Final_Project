@@ -10,6 +10,9 @@ from model.cube import RubicsCube,CubeSolver
 from model.scrambler import Scrammbler
 from model.scramble_configurations import scramble_configurations
 import sys
+
+file_path = 'randomfile.txt'
+sys.stdout = open(file_path, "w")
 rr = RubicsCube()
 scramble = Scrammbler()
 cubeSolver = CubeSolver()
