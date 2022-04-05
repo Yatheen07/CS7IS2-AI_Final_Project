@@ -10,9 +10,15 @@ from model.cube import RubicsCube,CubeSolver
 from model.scrambler import Scrammbler
 from model.scramble_configurations import scramble_configurations
 import sys
+import logging
+logging.basicConfig(filename="std.log", 
+					format='%(asctime)s %(message)s', 
+					filemode='w') 
+#Let us Create an object 
+logger=logging.getLogger() 
 
-file_path = 'randomfile.txt'
-sys.stdout = open(file_path, "w")
+#Now we are going to Set the threshold of logger to DEBUG 
+logger.setLevel(logging.DEBUG) 
 rr = RubicsCube()
 scramble = Scrammbler()
 cubeSolver = CubeSolver()
@@ -31,6 +37,8 @@ def goal_reached(cube):
                 if first != cube[ref + i, j]:
                     return False
     print('Gaol Reached')
+    logger.debug('Gaol Reached')
+    logger.info('Gaol Reached')
     flag = np.array_equal(rr.solved_config,cube)
     if flag:
         return flag
@@ -63,6 +71,8 @@ def ida(cube):
     while True:
         visited.add(state)
         print('New Level')
+        logger.debug('New Level')
+        logger.info('New Level')
         queue = PriorityQueue()
         minimum = math.inf
         # frontier.append(state)
@@ -75,6 +85,8 @@ def ida(cube):
             if goal_reached(cubestate.cube):
                 print('Goal Height:', cubestate.g)
                 print('Branching Factor:', sum(branching_factors)/len(branching_factors))
+                logger.debug('New Level')
+                logger.info('New Level')
                 # while curr is not None:
                 #    if curr.move is not None:
                 #        print(curr.move)
@@ -101,6 +113,8 @@ def ida(cube):
                     #b = b + 1
         cost_limit = minimum
         print('Limit Reched', str(cost_limit))
+        logger.debug('Limit Reched %s',str(cost_limit))
+        logger.info('Limit Reched %s',str(cost_limit))
 
 def IDAStar(cubestate):
         dist = util.patternDatabaseHeuristic(cubestate)
