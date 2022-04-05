@@ -10,8 +10,6 @@ from model.cube import RubicsCube,CubeSolver
 from model.scrambler import Scrammbler
 from model.scramble_configurations import scramble_configurations
 import sys
-path = 'search.logs'
-sys.stdout = open(path, 'w')
 rr = RubicsCube()
 scramble = Scrammbler()
 cubeSolver = CubeSolver()
