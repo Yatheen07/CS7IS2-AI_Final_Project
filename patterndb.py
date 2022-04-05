@@ -6,6 +6,12 @@ from model import scrambler
 import util
 from model.cube import RubicsCube,CubeSolver
 from model.scrambler import Scrammbler
+import logging
+logging.basicConfig(filename="patternstd.log", 
+					format='%(asctime)s %(message)s', 
+					filemode='w') 
+#Let us Create an object 
+logger=logging.getLogger() 
 class Cube:
     cube = None
     cost = 0
@@ -35,7 +41,9 @@ def generateCornerPatterns():
         queue.append(curr)
         while(len(queue)!=0):
             curr = queue.pop(0)
-            if(curr.cost < 10):
+            logger.debug('Current depth %s',str(curr.cost))
+            logger.info('Current depth %s',str(curr.cost))
+            if(curr.cost < 12):
                 childCost = curr.cost + 1
                 for key,action in scramble.action_map.items():
                     child = Cube()
@@ -53,6 +61,8 @@ def generateCornerPatterns():
                 cornermap.clear()
         print('Corner pattern generation complete')
         print('Total Patterns generated are ',len(cornermap))
+        logger.debug('Corner pattern generation complete')
+        logger.debug('Total pattern %s',str(cornermap))
         end = time.time()
         print(f'The time taken to generate pattern : {round(end - start, 2)}')
     except Exception as e:
@@ -110,7 +120,7 @@ def generateEdgePattern():
 def main():
     try: 
         generateCornerPatterns()
-        generateEdgePattern()
+        #generateEdgePattern()
         # cursor1.executemany('INSERT INTO CORNER_PATTERN(CORNERS, VALUE) VALUES (?, ?)', cornermap.items())
         # con1.commit()
         # cursor2.executemany('INSERT INTO EDGE_PATTERN(EDGES, VALUE) VALUES (?, ?)', edgemap.items())
