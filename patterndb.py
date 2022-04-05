@@ -62,7 +62,7 @@ def generateCornerPatterns():
         print('Corner pattern generation complete')
         print('Total Patterns generated are ',len(cornermap))
         logger.debug('Corner pattern generation complete')
-        logger.debug('Total pattern %s',str(cornermap))
+        logger.debug('Total pattern %s',str(len(cornermap)))
         end = time.time()
         print(f'The time taken to generate pattern : {round(end - start, 2)}')
     except Exception as e:
