@@ -9,7 +9,9 @@ from util import PriorityQueue
 from model.cube import RubicsCube,CubeSolver
 from model.scrambler import Scrammbler
 from model.scramble_configurations import scramble_configurations
-
+import sys
+path = 'search.logs'
+sys.stdout = open(path, 'w')
 rr = RubicsCube()
 scramble = Scrammbler()
 cubeSolver = CubeSolver()
@@ -159,8 +161,8 @@ def main():
     util.load_cornerpatterns()
     util.load_edgepatterns()
     rubicsCube.scramble(action_sequence=scramble_sequence)
-    #ida(rubicsCube.cube)
-    IDAStar(rubicsCube.cube)
+    ida(rubicsCube.cube)
+    #IDAStar(rubicsCube.cube)
 
 
 
