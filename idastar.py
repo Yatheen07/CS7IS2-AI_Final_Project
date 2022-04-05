@@ -85,8 +85,8 @@ def ida(cube):
             if goal_reached(cubestate.cube):
                 print('Goal Height:', cubestate.g)
                 print('Branching Factor:', sum(branching_factors)/len(branching_factors))
-                logger.debug('New Level')
-                logger.info('New Level')
+                logger.debug('Goal Height: ',str(cubestate.g))
+                logger.info('Goal Reached')
                 # while curr is not None:
                 #    if curr.move is not None:
                 #        print(curr.move)
