@@ -167,6 +167,7 @@ class Search:
         return False
 
     def astar(self):
+        print('Solving cube using A*')
         class CubeState:
             state = None
             g = 0
@@ -174,6 +175,7 @@ class Search:
             parent = None
             move = None
         bound  = util.patternDatabaseHeuristic(self.rubicsCube.cube)
+        print('Initial Heuristic = ',str(bound))
         queue = util.PriorityQueue()
         currentNode = copy.deepcopy(self.rubicsCube)
         start = CubeState()
@@ -200,7 +202,8 @@ class Search:
                         visited[config_string] = (currentNode.state.get_configuration_string(), action)
                         queue.push(new,new.g+new.h)
                     if new.state.is_cube_solved():
-                        print(new)
+                        print('Printing new')
+                        print(new.state)
                         goal_reached = True
                         return goal_reached,visited,new.state,len(visited)-1
         return goal_reached,visited,currentNode,len(visited)-1 
