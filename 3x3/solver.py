@@ -9,7 +9,7 @@ from search import Search
 #Initialise the Cube State - intial state is solved.
 cube = RubicsCube()
 cubeSolver = CubeSolver()
-cube.PrintCube()
+print(cube)
 
 #Scramble the state based on the preset configurations
 scrammbler = Scrammbler()
@@ -17,11 +17,11 @@ scramble_sequence,unscramble_sequence = scrammbler.scramble(scramble_configurati
 
 #Scramble a fresh cube to get a initial state
 cube.scramble(action_sequence=scramble_sequence)
-cube.PrintCube()
+print(cube)
 
 # #Test
 # cube.scramble(action_sequence=unscramble_sequence)
-# cube.PrintCube()
+# print(cube)
 
 # """Further Steps:
 #     1. Take the scrambled state of the cube as intial state
