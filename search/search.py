@@ -167,11 +167,48 @@ class Search:
         return False
 
     def astar(self):
+        class CubeState:
+            state = None
+            g = 0
+            h = 0
+            parent = None
+            move = None
         bound  = util.patternDatabaseHeuristic(self.rubicsCube.cube)
         queue = util.PriorityQueue()
-        queue.append(self.rubicsCube)
+        currentNode = copy.deepcopy(self.rubicsCube)
+        start = CubeState()
+        start.state = currentNode
+        start.h = bound
+        visited = {self.rubicsCube.get_configuration_string(): (self.start_state_config,"-1")}
+        queue.push(start,bound)
         while(not queue.isEmpty()):
-            temp = queue.pop()
-            temp.
+            currentNode = queue.pop()
+            if currentNode.state.is_cube_solved():
+                goal_reached = True
+                break
+            else:
+                for action,rotation in self.rotations:
+                    new = CubeState()
+                    new.state = copy.deepcopy(currentNode.state)
+                    new.g = currentNode.g + 1
+                    new.parent = currentNode
+                    new.move = action
+                    new.state.scramble([rotation])
+                    new.h = util.patternDatabaseHeuristic(new.state.cube)
+                    config_string = new.state.get_configuration_string()
+                    if not config_string in visited:
+                        visited[config_string] = (currentNode.state.get_configuration_string(), action)
+                        queue.push(new,new.g+new.h)
+                    if new.state.is_cube_solved():
+                        print(new)
+                        goal_reached = True
+                        return goal_reached,visited,new.state,len(visited)-1
+        return goal_reached,visited,currentNode,len(visited)-1 
             
+    def astarsearch(self):
+        util.load_cornerpatterns()
+        util.load_edgepatterns()
+        start = time.time()
+        goal_reached, visited, currentNode,number_of_states = self.astar()
+        self.printResults(path=self._trace_path(currentNode,visited),goal_reached=goal_reached,algorithm="A* Search",time_elapsed=time.time() - start,number_of_states=number_of_states)    
 

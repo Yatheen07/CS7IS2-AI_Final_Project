@@ -31,9 +31,10 @@ def solve_cube(scramble_size):
     # """
 
     searcher = Search(cube)
-    searcher.bfs()
+    #searcher.bfs()
     #searcher.dfs()
     # searcher.iddfs()
+    searcher.astarsearch()
 
 for size in range(7):
     print(f"Generating Scrambling sequence of size: {size+1}")
