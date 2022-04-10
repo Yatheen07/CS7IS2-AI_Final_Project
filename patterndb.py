@@ -45,7 +45,7 @@ def generateCornerPatterns():
             curr = queue.pop(0)
             logger.debug('Current depth %s',str(curr.cost))
             logger.info('Current depth %s',str(curr.cost))
-            if(curr.cost < 6):
+            if(curr.cost < 4):
                 childCost = curr.cost + 1
                 for key,action in scramble.action_map.items():
                     new_node = copy.deepcopy(curr.cube)
