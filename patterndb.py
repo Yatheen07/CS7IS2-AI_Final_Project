@@ -19,6 +19,7 @@ class Cube:
 
 cornermap = dict()
 edgemap = dict()
+pattern2dmap = dict()
 rubicsCube = RubicsCube(size=3)
 goal = rubicsCube.cube
 print(goal)
@@ -45,7 +46,7 @@ def generateCornerPatterns():
             curr = queue.pop(0)
             logger.debug('Current depth %s',str(curr.cost))
             logger.info('Current depth %s',str(curr.cost))
-            if(curr.cost < 4):
+            if(curr.cost < 7):
                 childCost = curr.cost + 1
                 for key,action in scramble.action_map.items():
                     new_node = copy.deepcopy(curr.cube)
@@ -60,6 +61,8 @@ def generateCornerPatterns():
                         cornermap[string] = child.cost
                         queue.append(child)
                 count += len(edgemap)
+            else:
+                break
         print('Corner pattern generation complete')
         print('Total Patterns generated are ',len(cornermap))
         logger.debug('Corner pattern generation complete')
@@ -94,14 +97,16 @@ def generateEdgePattern():
         queue.append(curr)
         while(len(queue)!=0):
             curr = queue.pop(0)
-            if(curr.cost < 5):
+            if(curr.cost < 7):
                 childCost = curr.cost + 1
                 for key,action in scramble.action_map.items():
+                    new_node = copy.deepcopy(curr.cube)
+                    new_node.scramble([action])
                     child = Cube()
-                    child.cube = np.array(curr.cube)
+                    # child.cube = np.array(curr.cube)
+                    child.cube = new_node
                     child.cost = childCost
-                    action(cubeSolver,child.cube)
-                    string  = util.getEdgeString(child.cube)
+                    string  = util.getEdgeString(child.cube.cube)
                     if string not in edgemap.keys():
                         edgemap[string] = child.cost
                         queue.append(child)
@@ -122,9 +127,67 @@ def generateEdgePattern():
         cursor.close()
         con.close()
 
+def generatePatterns2D():
+    try:
+        pocketCube = RubicsCube(size=2)
+        goal = pocketCube.cube
+        con = sqlite3.connect('pattern2d.db')
+        print("Creating pattern database for 2d");
+        cursor = con.execute('CREATE TABLE CORNER_PATTERN(CORNERS VARCHAR2(100),VALUE INT)')
+        print('Corner pattern Table created sucessfully')
+        count = 0
+        start = time.time()
+        print('Generating corner cubes patterns')
+        queue = list()
+        print('Goal string = ',pocketCube.get_configuration_string())
+        pattern2dmap[pocketCube.get_configuration_string()] = 0
+        curr = Cube()
+        curr.cost = 0
+        curr.cube = copy.deepcopy(pocketCube)
+        # curr.cube = np.array(goal)
+        queue.append(curr)
+        while(len(queue)!=0):
+            curr = queue.pop(0)
+            logger.debug('Current depth %s',str(curr.cost))
+            logger.info('Current depth %s',str(curr.cost))
+            print(curr.cost)
+            if(curr.cost < 6):
+                childCost = curr.cost + 1
+                for key,action in scramble.action_map.items():
+                    new_node = copy.deepcopy(curr.cube)
+                    new_node.scramble([action])
+                    child = Cube()
+                    # child.cube = np.array(curr.cube)
+                    child.cube = new_node
+                    child.cost = childCost
+                    string  = child.cube.get_configuration_string()
+                    if string not in pattern2dmap.keys():
+                        pattern2dmap[string] = child.cost
+                        queue.append(child)
+                count += len(edgemap)
+            else:
+                break
+        print('Corner pattern generation complete')
+        print('Total Patterns generated are ',len(pattern2dmap))
+        logger.debug('Corner pattern generation complete')
+        logger.debug('Total pattern %s',str(len(pattern2dmap)))
+        end = time.time()
+        print(f'The time taken to generate pattern : {round(end - start, 2)}')
+        cursor.executemany('INSERT INTO CORNER_PATTERN(CORNERS, VALUE) VALUES (?, ?)', pattern2dmap.items())
+        con.commit()
+        print('Insert complete')
+        cornermap.clear()
+    except Exception as e:
+        print(e,'Error Occurred')
+    finally:
+        cursor.close()
+        con.close()
+
+
 def main():
     try: 
-        generateCornerPatterns()
+        generatePatterns2D()
+        #generateCornerPatterns()
         #generateEdgePattern()
         # cursor1.executemany('INSERT INTO CORNER_PATTERN(CORNERS, VALUE) VALUES (?, ?)', cornermap.items())
         # con1.commit()

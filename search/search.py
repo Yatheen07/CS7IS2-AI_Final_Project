@@ -174,7 +174,7 @@ class Search:
             h = 0
             parent = None
             move = None
-        bound  = util.patternDatabaseHeuristic(self.rubicsCube.cube)
+        bound  = util.patternDatabaseHeuristic(self.rubicsCube)
         print('Initial Heuristic = ',str(bound))
         queue = util.PriorityQueue()
         currentNode = copy.deepcopy(self.rubicsCube)
@@ -196,7 +196,7 @@ class Search:
                     new.parent = currentNode
                     new.move = action
                     new.state.scramble([rotation])
-                    new.h = util.patternDatabaseHeuristic(new.state.cube)
+                    new.h = util.patternDatabaseHeuristic(new.state)
                     config_string = new.state.get_configuration_string()
                     if not config_string in visited:
                         visited[config_string] = (currentNode.state.get_configuration_string(), action)
@@ -207,11 +207,16 @@ class Search:
                         goal_reached = True
                         return goal_reached,visited,new.state,len(visited)-1
         return goal_reached,visited,currentNode,len(visited)-1 
-            
+
+    
     def astarsearch(self):
-        util.load_cornerpatterns()
-        util.load_edgepatterns()
+        if self.size == 3:
+            util.load_cornerpatterns()
+            util.load_edgepatterns()
+        else:
+            util.load2dpatterns()
         start = time.time()
         goal_reached, visited, currentNode,number_of_states = self.astar()
         self.printResults(path=self._trace_path(currentNode,visited),goal_reached=goal_reached,algorithm="A* Search",time_elapsed=time.time() - start,number_of_states=number_of_states)    
 
+    
