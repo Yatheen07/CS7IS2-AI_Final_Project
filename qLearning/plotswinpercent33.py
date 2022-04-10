@@ -1,4 +1,4 @@
-# 2x2 TIME
+# 3x3 Win percentage
 import matplotlib.pyplot as plt
 
 bfs = [None, 0.001,
