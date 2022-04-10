@@ -167,11 +167,12 @@ class Search:
         return False
 
     def astar(self):
+        start = self.rubicsCube
         bound  = util.patternDatabaseHeuristic(self.rubicsCube.cube)
         queue = util.PriorityQueue()
-        queue.append(self.rubicsCube)
+        queue.push(self.rubicsCube, bound)
         while(not queue.isEmpty()):
             temp = queue.pop()
-            temp.
+            
             
 
