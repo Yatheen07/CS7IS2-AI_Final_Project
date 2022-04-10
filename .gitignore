@@ -2,3 +2,9 @@ model/__pycache__/*
 *.db
 __pycache__/*
 mcts/3x3/data/cube3/.DS_Store
+*.iml
+*.xml
+*.pyc
+*.pyc
+*.pyc
+*.pyc
