@@ -1,5 +1,12 @@
 scramble_configurations = [
-    "F2 L2 B2 U D' B D",
+    "F",
+    "F U'",
+    "F U' B",
+    "F U' B D'",
+    "F U' B D' R'",
+    "F U' B D' R' L",
+    "F U' B D' R' L U",
+    "F U' B D' R' L U D",
     "D B F D R' D' U' B' U2 L2 R2 D' F2 L' B2 U' B' F' L U2 B D2 L2 D F",
     "L' F' L D' U2 B2 U L' B D' F' R' F' R' D' U' F2 D F' R2 U2 L' F L D",
     "D2 L' D' U' F' R2 U' R F2 U2 L' R2 U2 R2 U D' R2 L2 D' U L2 U2 F L' R2",

@@ -45,7 +45,7 @@ import random
 
 from cube import Cube
 
-def n_move_state(n=5):
+def scramble(n=5):
     c = Cube()
     return shuffle(c, n=n)
 

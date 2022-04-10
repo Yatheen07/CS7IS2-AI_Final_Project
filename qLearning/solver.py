@@ -7,21 +7,34 @@ def solveCube():
     wins = 0
     game_summary = []
 
+    agent = Agent()
+    start = time.time()
+    print("[INFO] REGISTERING PATTERN DATABASE")
+    agent.register_patterns()
+    qValues = agent.QV
+    print(f"[INFO] GENERATED PATTERN DATABASE IN {time.time() - start} seconds")
+    
+    print("="*50)
+    start = time.time()
+    print("[INFO] STARTING LEARNING PHASE")
+    Epsilons = [i/ 50 for i in range(50)]
+    Epsilons.reverse()
+    max_states = -1
+    for _ in range(2):
+        for j, e in enumerate(Epsilons):
+            #print("======= ROUND " + str(j) + "=========")
+            states = agent.QLearn(epsilon=e)
+            max_states = max(max_states,states)
+    qValues = agent.QV
+    print(f"[INFO] COMPLETED LEARNING PHASE IN {time.time() - start} seconds")
+    print(f"[INFO] Number of states explored: {len(qValues)}")
+    print("="*50)
+
+    #print(len(qValues))
     for i in range(10):
         game = {}
-        agent = Agent()
+        agent = Agent(QValues=qValues)
         start = time.time()
-        print("[INFO] REGISTERING PATTERN DATABASE")
-        agent.register_patterns()
-        print(f"[INFO] GENERATED PATTERN DATABASE IN {time.time() - start} seconds")
-
-        #print(f"[INFO] QValues: {agent.QV}")
-        Epsilons = [i/ 50 for i in range(50)]
-        Epsilons.reverse()
-        for _ in range(2):
-            for j, e in enumerate(Epsilons):
-                #print("======= ROUND " + str(j) + "=========")
-                agent.QLearn(epsilon=e)
         #print("there are " + str(len(agent.QV)) + " keys in Q Table")
         cube_solved = agent.Play()
         if cube_solved:
