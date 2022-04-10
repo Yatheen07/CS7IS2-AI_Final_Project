@@ -1,10 +1,11 @@
+from traceback import print_tb
 import numpy as np
 import heapq
 import sqlite3
 
 cornerdb = dict()
 edgedb = dict()
-
+pattern2d = dict()
 class PriorityQueue:
     def  __init__(self):
         self.heap = []
@@ -67,19 +68,47 @@ def load_edgepatterns():
     for x, y in rows:
         edgedb[x] = y
 
-def patternDatabaseHeuristic(cube):
-    cornerstring = getCornerString(cube)
-    edgestring = getEdgeString(cube)
+def load2dpatterns():
+    conn = sqlite3.connect('pattern2d.db')
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM CORNER_PATTERN")
+    rows = cur.fetchall()
+    for x, y in rows:
+        pattern2d[x] = y
+
+def patternDatabaseHeuristic(rubicCube):
+    if rubicCube.size == 2:
+        h = pattern2d.get(rubicCube.get_configuration_string(),-1)
+        if h == -1:
+            return 0
+        else:
+            return h
+    cornerstring = getCornerString(rubicCube.cube)
+    edgestring = getEdgeString(rubicCube.cube)
     cornerh = cornerdb.get(cornerstring,-1)
     edgeh = edgedb.get(edgestring,-1)
     if cornerh != -1 and edgeh !=-1:
         return max(cornerh,edgeh)
+    elif cornerh == -1 and edgeh == -1:
+        return 0
     elif cornerh == -1:
         return edgeh
-    elif edgeh == -1:
-        return cornerh
     else:
-        return -1
+        return cornerh
 
+class Stack:
+    "A container with a last-in-first-out (LIFO) queuing policy."
+    def __init__(self):
+        self.list = []
 
+    def push(self,item):
+        "Push 'item' onto the stack"
+        self.list.append(item)
 
+    def pop(self):
+        "Pop the most recently pushed item from the stack"
+        return self.list.pop()
+
+    def isEmpty(self):
+        "Returns true if the stack is empty"
+        return len(self.list) == 0
